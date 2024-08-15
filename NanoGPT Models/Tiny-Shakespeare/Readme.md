@@ -25,7 +25,8 @@ python3 test.py
 
 ## Train the model
 
-Prepare the data
+### Prepare the data and train the model
+
 python3 prepare.py
 
 python3 train.py config/train_shakespeare_char.py
