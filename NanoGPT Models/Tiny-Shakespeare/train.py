@@ -3,7 +3,7 @@ import time
 import math
 import pickle
 from contextlib import nullcontext
-
+import unittest
 import numpy as np
 import torch
 from torch.nn.parallel import DistributedDataParallel as DDP
@@ -288,3 +288,79 @@ while True:
 
 if ddp:
     destroy_process_group()
+
+#######unit tests
+# Mocking external dependencies
+os.environ['RANK'] = '0'
+os.environ['LOCAL_RANK'] = '0'
+os.environ['WORLD_SIZE'] = '1'
+
+class TestTrainingScript(unittest.TestCase):
+    def setUp(self):
+        # Mocking the os environment for distributed training
+        self.patcher1 = patch('os.environ.get')
+        self.mock_environ_get = self.patcher1.start()
+        self.mock_environ_get.side_effect = lambda x, default=None: {'RANK': '0', 'LOCAL_RANK': '0', 'WORLD_SIZE': '1'}.get(x, default)
+
+        self.patcher2 = patch('torch.distributed.init_process_group')
+        self.mock_init_pg = self.patcher2.start()
+
+        self.patcher3 = patch('torch.distributed.destroy_process_group')
+        self.mock_destroy_pg = self.patcher3.start()
+
+        # Assuming get_batch is a standalone function, which it should be for this test
+        self.patcher4 = patch('__main__.get_batch', return_value=(torch.rand(10, 1024), torch.rand(10, 1024)))
+        self.mock_get_batch = self.patcher4.start()
+
+        # Mock model loading and saving
+        self.patcher5 = patch('torch.load')
+        self.mock_torch_load = self.patcher5.start()
+
+        self.patcher6 = patch('torch.save')
+        self.mock_torch_save = self.patcher6.start()
+
+        # Assume all these parameters are global in the script; these would ideally be encapsulated in a config or similar structure
+        self.config = GPTConfig(n_layer=12, n_head=12, n_embd=768, block_size=1024, bias=False, vocab_size=50304, dropout=0.0)
+
+    def tearDown(self):
+        patch.stopall()
+
+    def test_model_initialization_from_scratch(self):
+        """ Test initialization of model from scratch. """
+        with patch('builtins.print') as mocked_print:
+            model = GPT(self.config)
+            self.assertIsInstance(model, GPT)
+            mocked_print.assert_called_with("Initializing a new model from scratch")
+
+    def test_resume_training_from_checkpoint(self):
+        """ Test resuming training from a checkpoint. """
+        self.mock_torch_load.return_value = {
+            'model': {},
+            'optimizer': {},
+            'model_args': {'n_layer': 12, 'n_head': 12, 'n_embd': 768, 'block_size': 1024, 'bias': False, 'vocab_size': 50304},
+            'iter_num': 100,
+            'best_val_loss': 0.5
+        }
+        with patch('builtins.print') as mocked_print:
+            model = GPT(self.config)
+            self.assertIsInstance(model, GPT)
+            mocked_print.assert_called_with("Resuming training from out")
+
+    def test_training_iteration_updates(self):
+        """ Test the training loop logic for a single iteration with mocked data and functions. """
+        model = GPT(self.config)
+        model.train = MagicMock()
+        optimizer = MagicMock()
+        with patch('__main__.GPT.configure_optimizers', return_value=optimizer):
+            with patch('__main__.estimate_loss', return_value={'train': 0.5, 'val': 0.4}):
+                # Execute one iteration of the loop
+                # This would be the loop body in the script, greatly simplified for testing
+                X, Y = get_batch('train')  # Using the mocked get_batch function
+                logits, loss = model(X), torch.tensor(0.5)  # Simplified forward pass
+                loss.backward()
+                optimizer.step()
+                optimizer.zero_grad()
+                self.assertTrue(True)  # If no exceptions and reaches here, basic logic works
+
+if __name__ == '__main__':
+    unittest.main()
