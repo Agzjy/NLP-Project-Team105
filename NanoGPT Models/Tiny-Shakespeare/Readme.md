@@ -14,9 +14,10 @@ To run the scripts, you will need Python 3 and the following dependencies:
 
 ## Installation
 
-Clone the repository to your local machine:
+Clone the repository to your local machine
 
 pip install torch==2.5.0
+
 pip install numpy transformers==2.11.0 datasets==2.0.0 tiktoken tqdm
 
 ## Testing the model
