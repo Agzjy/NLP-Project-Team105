@@ -311,3 +311,58 @@ class GPT(nn.Module):
             idx = torch.cat((idx, idx_next), dim=1)
 
         return idx
+##unit tests
+class TestLayerNorm(unittest.TestCase):
+    def test_basic_functionality(self):
+        ndim = 10
+        input_tensor = torch.randn(5, ndim)
+        layer_norm = LayerNorm(ndim, bias=True)
+        output = layer_norm(input_tensor)
+
+        # Check output size
+        self.assertEqual(output.size(), input_tensor.size())
+
+class TestCausalSelfAttention(unittest.TestCase):
+    def test_attention_output_shape(self):
+        config = GPTConfig(n_embd=32, n_head=4, dropout=0.1, bias=True, block_size=15)
+        model = CausalSelfAttention(config)
+        input_tensor = torch.randn(2, 15, 32)  # (batch_size, seq_length, embd_dim)
+        output = model(input_tensor)
+        self.assertEqual(output.shape, input_tensor.shape)
+
+class TestMLP(unittest.TestCase):
+    def test_mlp_output_shape(self):
+        config = GPTConfig(n_embd=64, dropout=0.1, bias=True)
+        mlp = MLP(config)
+        input_tensor = torch.randn(10, 15, 64)
+        output = mlp(input_tensor)
+        self.assertEqual(output.shape, input_tensor.shape)
+
+class TestBlock(unittest.TestCase):
+    def test_block_integration(self):
+        config = GPTConfig(n_embd=64, n_head=8, dropout=0.1, bias=True, block_size=15)
+        block = Block(config)
+        input_tensor = torch.randn(3, 15, 64)
+        output = block(input_tensor)
+        self.assertEqual(output.shape, input_tensor.shape)
+
+class TestGPTModel(unittest.TestCase):
+    def test_full_model_forward_pass(self):
+        config = GPTConfig(n_embd=128, n_head=8, dropout=0.1, bias=True, block_size=10, vocab_size=100, n_layer=2)
+        model = GPT(config)
+        input_tensor = torch.randint(0, 100, (1, 10))  # Simulate input ids for 10 tokens
+        output_logits, _ = model(input_tensor)
+        self.assertEqual(output_logits.shape, (1, 1, 100))  # Since it only processes the last token for inference
+
+def suite():
+    suite = unittest.TestSuite()
+    suite.addTest(unittest.makeSuite(TestLayerNorm))
+    suite.addTest(unittest.makeSuite(TestCausalSelfAttention))
+    suite.addTest(unittest.makeSuite(TestMLP))
+    suite.addTest(unittest.makeSuite(TestBlock))
+    suite.addTest(unittest.makeSuite(TestGPTModel))
+    return suite
+
+if __name__ == "__main__":
+    runner = unittest.TextTestRunner()
+    runner.run(suite())
