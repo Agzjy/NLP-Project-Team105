@@ -20,7 +20,11 @@ pip install torch==2.5.0
 
 pip install numpy transformers==2.11.0 datasets==2.0.0 tiktoken tqdm
 
-## Testing the model
+## To first test out the demo
+Create a folder called **out** and download the weights of the model from this link:
+https://drive.google.com/file/d/10ZJu-GDBh8VyXmyTpoG-2bqcnW-JbHYO/view?usp=sharing
+
+Run the command:
 
 python3 test.py
 
