@@ -16,6 +16,20 @@ To run the scripts, you will need Python 3 and the following dependencies:
 
 Clone the repository to your local machine:
 
-```bash
-git clone https://github.com/your-username/your-repository.git
-cd your-repository
+pip install torch==2.5.0
+pip install numpy transformers==2.11.0 datasets==2.0.0 tiktoken tqdm
+
+## Testing the model
+
+python3 test.py
+
+## Train the model
+
+Prepare the data
+python3 prepare.py
+
+python3 train.py config/train_shakespeare_char.py
+
+
+
+
