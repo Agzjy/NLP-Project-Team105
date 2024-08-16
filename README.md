@@ -82,5 +82,5 @@ ReadMe: Detailed instructions are in the README.md file within the directory.
 ## Results
 The performance of NanoGPT was evaluated using perplexity as the primary metric. Detailed results for each model can be found in the respective directories.
 
-## Contributing
+## Contribution
 Pooja Laxmi Sankarakameswaran, Poornima Jaykumar Dharamdasani, and Jiaying Zheng.
