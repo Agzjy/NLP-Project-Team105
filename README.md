@@ -11,7 +11,7 @@
     - [Lyrics Generator](https://github.com/Agzjy/NLP-Project-Team105/tree/master/NanoGPT%20Models/Lyrics%20Generator)
     - [Story Generator](https://github.com/Agzjy/NLP-Project-Team105/tree/master/NanoGPT%20Models/Story%20Generator)
 6. [Results](#results)
-7. [Contributing](#contributing)
+7. [Contribution](#contribution)
 
 ## Overview
 
