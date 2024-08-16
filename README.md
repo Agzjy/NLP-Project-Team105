@@ -7,9 +7,9 @@
 3. [Installation](#installation)
 4. [Usage](#usage)
 5. [Model Details](#model-details)
-    - [Tiny Shakespeare](#tiny-shakespeare)
+    - [Tiny Shakespeare]()
     - [Lyrics Generator](https://github.com/Agzjy/NLP-Project-Team105/tree/master/NanoGPT%20Models/Lyrics%20Generator)
-    - [Story Generator](#story-generator)
+    - [Story Generator]([#story-generator](https://github.com/Agzjy/NLP-Project-Team105/tree/master/NanoGPT%20Models/Story%20Generator))
 6. [Results](#results)
 7. [Contributing](#contributing)
 
