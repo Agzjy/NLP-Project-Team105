@@ -54,7 +54,7 @@ cd NanoGPT-Project/NanoGPT Models/Lyrics Generator
 
 ## Model Details
 **Tiny Shakespeare**
-NanoGPT was trained on the Tiny Shakespeare dataset to generate Shakespeare-like text.
+NanoGPT was trained on the [Tiny Shakespeare dataset](https://www.kaggle.com/datasets/thedevastator/the-bards-best-a-character-modeling-dataset) to generate Shakespeare-like text.
 
 Training Script: train.py
 Model Script: model.py
@@ -69,7 +69,7 @@ Unit Tests: unit_test.ipynb
 ReadMe: Detailed instructions are in the README.md file within the directory.
 
 **Story Generator**
-NanoGPT was trained on the Story Cloze dataset to generate 5-sentence stories based on prompts.
+NanoGPT was trained on the [Story Cloze dataset](https://huggingface.co/datasets/LSDSem/story_cloze) to generate 5-sentence stories based on prompts.
 
 Story Generator Script: story_generator.py
 Loading Model Script: load_model.py
